@@ -29,13 +29,13 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (flightHeightUpButton && flightHeightDownButton) {
-    flightHeightUpButton.addEventListener('click', () => adjustValue('flight-height', isMetric ? 1 : 1));
-    flightHeightDownButton.addEventListener('click', () => adjustValue('flight-height', isMetric ? -1 : -1));
+    flightHeightUpButton.addEventListener('click', () => adjustValue('flight-height', 1));
+    flightHeightDownButton.addEventListener('click', () => adjustValue('flight-height', -1));
   }
 
   if (desiredGSDUpButton && desiredGSDDownButton) {
-    desiredGSDUpButton.addEventListener('click', () => adjustValue('desired-gsd', isMetric ? 0.1 : 0.1));
-    desiredGSDDownButton.addEventListener('click', () => adjustValue('desired-gsd', isMetric ? -0.1 : -0.1));
+    desiredGSDUpButton.addEventListener('click', () => adjustValue('desired-gsd', 0.1));
+    desiredGSDDownButton.addEventListener('click', () => adjustValue('desired-gsd', -0.1));
   }
 
   if (imperialButton && metricButton) {
@@ -170,10 +170,15 @@ function handleBlur(event) {
 }
 
 function updateInputValue(inputElement, value, unit) {
-  inputElement.value = value.toFixed(2);
-  const unitElement = document.getElementById(`${inputElement.id}-unit`);
-  if (unitElement) {
-    unitElement.textContent = unit;
+  if (value === 0 || value === '0' || value === '0.00') {
+    inputElement.value = '';
+    inputElement.placeholder = `Enter ${unit === 'ft' || unit === 'm' ? 'height' : 'GSD'} in ${unit}`;
+  } else {
+    inputElement.value = value.toFixed(2);
+    const unitElement = document.getElementById(`${inputElement.id}-unit`);
+    if (unitElement) {
+      unitElement.textContent = unit;
+    }
   }
 }
 
@@ -185,10 +190,11 @@ function adjustValue(id, adjustment) {
   const input = document.getElementById(id);
   let value = parseFloat(input.value) || 0;
 
-  if (id === 'flight-height') {
+  if (id === 'desired-gsd') {
     value += adjustment;
-  } else {
-    value = Math.max(0, value + adjustment);
+    value = Math.max(value, 0); // Ensure value is non-negative
+  } else if (id === 'flight-height') {
+    value += adjustment;
   }
 
   updateInputValue(input, value, getUnitForInput(id));
@@ -202,6 +208,7 @@ function clearInputs() {
   if (flightHeightInput && desiredGSDInput) {
     flightHeightInput.value = '';
     desiredGSDInput.value = '';
+    updatePlaceholders();
   }
 
   document.getElementById('flight-height-unit').textContent = isMetric ? 'm' : 'ft';
@@ -209,22 +216,30 @@ function clearInputs() {
 }
 
 function toggleUnits(unit) {
-  isMetric = unit === 'metric';
-
   const flightHeightInput = document.getElementById('flight-height');
   const desiredGSDInput = document.getElementById('desired-gsd');
 
-  if (flightHeightInput.value) {
-    const flightHeight = parseFloat(flightHeightInput.value);
-    updateInputValue(flightHeightInput, isMetric ? flightHeight / 3.28084 : flightHeight * 3.28084, isMetric ? 'm' : 'ft');
+  let flightHeight = parseFloat(flightHeightInput.value) || 0;
+  let desiredGSD = parseFloat(desiredGSDInput.value) || 0;
+
+  if (unit === 'metric') {
+    if (!isMetric) {
+      flightHeight = flightHeight / 3.28084;
+      desiredGSD = desiredGSD * 2.54;
+    }
+    isMetric = true;
+  } else {
+    if (isMetric) {
+      flightHeight = flightHeight * 3.28084;
+      desiredGSD = desiredGSD / 2.54;
+    }
+    isMetric = false;
   }
 
-  if (desiredGSDInput.value) {
-    const desiredGSD = parseFloat(desiredGSDInput.value);
-    updateInputValue(desiredGSDInput, isMetric ? desiredGSD * 2.54 : desiredGSD / 2.54, isMetric ? 'cm/px' : 'in/px');
-  }
-
+  updateInputValue(flightHeightInput, flightHeight, isMetric ? 'm' : 'ft');
+  updateInputValue(desiredGSDInput, desiredGSD, isMetric ? 'cm/px' : 'in/px');
   updatePlaceholders();
+
   document.getElementById('flight-height-unit').textContent = isMetric ? 'm' : 'ft';
   document.getElementById('desired-gsd-unit').textContent = isMetric ? 'cm/px' : 'in/px';
 
