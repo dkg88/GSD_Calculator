@@ -1,0 +1,29 @@
+[
+  {
+    "name": "DJI Mavic 3 Enterprise",
+    "imageWidth": 5280,
+    "imageHeight": 3956,
+    "sensorWidth": 17.3,
+    "sensorHeight": 13,
+    "focalLength": 12.3,
+    "megapixels": 20
+  },
+  {
+    "name": "DJI Matrice 300 RTK with Zenmuse P1 (35mm lens)",
+    "imageWidth": 8192,
+    "imageHeight": 5460,
+    "sensorWidth": 35.9,
+    "sensorHeight": 24,
+    "focalLength": 35,
+    "megapixels": 45
+  },
+  {
+    "name": "DJI Phantom 4 RTK",
+    "imageWidth": 5472,
+    "imageHeight": 3648,
+    "sensorWidth": 13.2,
+    "sensorHeight": 8,
+    "focalLength": 8.8,
+    "megapixels": 20.1
+  }
+]
