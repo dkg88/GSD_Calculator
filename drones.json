@@ -1,90 +1,167 @@
-[
-  {
-    "name": "Mini 3 / Pro",
-    "imageWidth": 4032,
-    "imageHeight": 3024,
-    "sensorWidth": 9.7,
-    "sensorHeight": 7.3,
-    "focalLength": 6.97
-  },
-  {
-    "name": "Phantom 3 Pro",
-    "imageWidth": 4000,
-    "imageHeight": 3000,
-    "sensorWidth": 6.16,
-    "sensorHeight": 4.62,
-    "focalLength": 3.59
-  },
-  {
-    "name": "Mavic Pro",
-    "imageWidth": 4000,
-    "imageHeight": 3000,
-    "sensorWidth": 6.3,
-    "sensorHeight": 4.7,
-    "focalLength": 4.78
-  },
-  {
-    "name": "DJI M300 RTK / P1 (24mm)",
-    "imageWidth": 8192,
-    "imageHeight": 5460,
-    "sensorWidth": 35.9,
-    "sensorHeight": 24,
-    "focalLength": 24
-  },
-  {
-    "name": "DJI M300 RTK / P1 (50mm)",
-    "imageWidth": 8192,
-    "imageHeight": 5460,
-    "sensorWidth": 35.9,
-    "sensorHeight": 24,
-    "focalLength": 50
-  },
-  {
-    "name": "Mavic Air",
-    "imageWidth": 4056,
-    "imageHeight": 3040,
-    "sensorWidth": 6.3,
-    "sensorHeight": 4.7,
-    "focalLength": 4.29
-  },
-  {
-    "name": "Mavic 2 Zoom",
-    "imageWidth": 4000,
-    "imageHeight": 3000,
-    "sensorWidth": 6.3,
-    "sensorHeight": 4.7,
-    "focalLength": 4.44
-  },
-  {
-    "name": "Mavic 2 Pro",
-    "imageWidth": 5472,
-    "imageHeight": 3648,
-    "sensorWidth": 13.2,
-    "sensorHeight": 8.8,
-    "focalLength": 9.97
-  },
-  {
-    "name": "Mavic Mini",
-    "imageWidth": 4000,
-    "imageHeight": 3000,
-    "sensorWidth": 6.3,
-    "sensorHeight": 4.7,
-    "focalLength": 4.44
-  },
-  {
-    "name": "Mavic Air 2",
-    "imageWidth": 4000,
-    "imageHeight": 3000,
-    "sensorWidth": 6.4,
-    "sensorHeight": 4.8,
-    "focalLength": 4.44
-  },
-  {
-    "name": "DJI Mavic 3 Enterprise",
-    "imageWidth": 5280,
-    "imageHeight": 3956,
-    "sensorWidth": 17.3,
-    "sensorHeight": 13,
-    "focalLength": 12.3
-  }
-]
+{
+  "drones": [
+    {
+      "name": "DJI Mini 3 / Pro",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4032,
+          "imageHeight": 3024,
+          "sensorWidth": 9.7,
+          "sensorHeight": 7.3,
+          "focalLength": 6.97,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Phantom 3 Pro",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.16,
+          "sensorHeight": 4.62,
+          "focalLength": 3.59,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic Pro",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.3,
+          "sensorHeight": 4.7,
+          "focalLength": 4.78,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic Air",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4056,
+          "imageHeight": 3040,
+          "sensorWidth": 6.3,
+          "sensorHeight": 4.7,
+          "focalLength": 4.29,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic 2 Zoom",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.3,
+          "sensorHeight": 4.7,
+          "focalLength": 4.44,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic 2 Pro",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 5472,
+          "imageHeight": 3648,
+          "sensorWidth": 13.2,
+          "sensorHeight": 8.8,
+          "focalLength": 9.97,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic Mini",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.3,
+          "sensorHeight": 4.7,
+          "focalLength": 4.44,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic Air 2",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.4,
+          "sensorHeight": 4.8,
+          "focalLength": 4.44,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic 3 Enterprise",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 5280,
+          "imageHeight": 3956,
+          "sensorWidth": 17.3,
+          "sensorHeight": 13,
+          "focalLength": 12.3,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI M300 RTK",
+      "sensors": [
+        {
+          "name": "Zenmuse P1 (24mm)",
+          "imageWidth": 8192,
+          "imageHeight": 5460,
+          "sensorWidth": 35.9,
+          "sensorHeight": 24,
+          "focalLength": 24,
+          "megapixels": ""
+        },
+        {
+          "name": "Zenmuse P1 (50mm)",
+          "imageWidth": 8192,
+          "imageHeight": 5460,
+          "sensorWidth": 35.9,
+          "sensorHeight": 24,
+          "focalLength": 50,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI P4 RTK",
+      "sensors": [
+        {
+          "name": "Built-in",
+          "imageWidth": 5472,
+          "imageHeight": 3648,
+          "sensorWidth": 13.2,
+          "sensorHeight": 8.8,
+          "focalLength": 8.8,
+          "megapixels": 20
+        }
+      ]
+    }
+  ]
+}
