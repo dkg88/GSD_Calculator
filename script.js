@@ -101,6 +101,7 @@ function selectDrone(drone) {
   populateSensorSelect(drone);
   if (drone.sensors.length === 1) {
     updateSensorDetails(drone.sensors[0]); // Automatically update sensor details if only one sensor
+    recalculateValues();
   } else {
     clearSensorDetails(); // Clear sensor details if multiple sensors are available
   }
@@ -117,6 +118,7 @@ function populateSensorSelect(drone) {
     if (drone.sensors.length === 1) {
       sensorSelectButton.textContent = drone.sensors[0].name;
       updateSensorDetails(drone.sensors[0]);
+      recalculateValues();
     } else {
       drone.sensors.forEach(sensor => {
         const sensorOption = document.createElement('div');
@@ -142,6 +144,7 @@ function selectSensor(sensor) {
     sensorSelectButton.textContent = sensor.name;
   }
   updateSensorDetails(sensor);
+  recalculateValues();
 }
 
 function updateSensorDetails(sensor) {
@@ -295,5 +298,20 @@ function resetCalculator() {
   const resultElement = document.getElementById('result');
   if (resultElement) {
     resultElement.textContent = '';
+  }
+}
+
+function recalculateValues() {
+  const flightHeightInput = document.getElementById('flight-height');
+  const desiredGSDInput = document.getElementById('desired-gsd');
+  const flightHeight = parseFloat(flightHeightInput.value);
+  const gsd = parseFloat(desiredGSDInput.value);
+
+  if (!isNaN(flightHeight) && selectedSensor) {
+    const calculatedGSD = calculateGSD(flightHeight, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
+    updateInputValue(desiredGSDInput, calculatedGSD, isMetric ? 'cm/px' : 'in/px');
+  } else if (!isNaN(gsd) && selectedSensor) {
+    const calculatedFlightHeight = calculateFlightHeight(gsd, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
+    updateInputValue(flightHeightInput, calculatedFlightHeight, isMetric ? 'm' : 'ft');
   }
 }

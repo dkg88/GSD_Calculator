@@ -113,16 +113,25 @@
       ]
     },
     {
-      "name": "DJI Mavic 3 Enterprise",
+      "name": "DJI Mavic 3E",
       "sensors": [
         {
-          "name": "Built-in",
+          "name": "Wide Camera (4/3 CMOS)",
           "imageWidth": 5280,
           "imageHeight": 3956,
           "sensorWidth": 17.3,
           "sensorHeight": 13,
-          "focalLength": 12.3,
-          "megapixels": ""
+          "focalLength": 24,
+          "megapixels": 20
+        },
+        {
+          "name": "Tele Camera (1/2-inch CMOS)",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.4,
+          "sensorHeight": 4.8,
+          "focalLength": 162,
+          "megapixels": 12
         }
       ]
     },
@@ -136,7 +145,7 @@
           "sensorWidth": 35.9,
           "sensorHeight": 24,
           "focalLength": 24,
-          "megapixels": ""
+          "megapixels": 45
         },
         {
           "name": "Zenmuse P1 (50mm)",
@@ -145,7 +154,25 @@
           "sensorWidth": 35.9,
           "sensorHeight": 24,
           "focalLength": 50,
+          "megapixels": 45
+        },
+        {
+          "name": "Zenmuse L1 (RGB camera)",
+          "imageWidth": 5472,
+          "imageHeight": 3648,
+          "sensorWidth": 13.2,
+          "sensorHeight": 8.8,
+          "focalLength": 8.8,
           "megapixels": ""
+        },
+        {
+          "name": "Zenmuse P1 (35mm)",
+          "imageWidth": 8192,
+          "imageHeight": 5460,
+          "sensorWidth": 35.9,
+          "sensorHeight": 24,
+          "focalLength": 35,
+          "megapixels": 45
         }
       ]
     },
@@ -153,13 +180,77 @@
       "name": "DJI P4 RTK",
       "sensors": [
         {
-          "name": "Built-in",
+          "name": "1-inch CMOS (4:3)",
+          "imageWidth": 4864,
+          "imageHeight": 3648,
+          "sensorWidth": 13.2,
+          "sensorHeight": 8.8,
+          "focalLength": 8.8,
+          "megapixels": 20
+        },
+        {
+          "name": "1-inch CMOS (3:2)",
           "imageWidth": 5472,
           "imageHeight": 3648,
           "sensorWidth": 13.2,
           "sensorHeight": 8.8,
           "focalLength": 8.8,
           "megapixels": 20
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic 3T",
+      "sensors": [
+        {
+          "name": "Wide Camera (1/2-inch CMOS)",
+          "imageWidth": 8000,
+          "imageHeight": 6000,
+          "sensorWidth": 6.4,
+          "sensorHeight": 4.8,
+          "focalLength": 4.4,
+          "megapixels": 48
+        },
+        {
+          "name": "Tele Camera (1/2-inch CMOS)",
+          "imageWidth": 4000,
+          "imageHeight": 3000,
+          "sensorWidth": 6.4,
+          "sensorHeight": 4.8,
+          "focalLength": 29.85,
+          "megapixels": 12
+        },
+        {
+          "name": "Thermal Camera",
+          "imageWidth": 640,
+          "imageHeight": 512,
+          "sensorWidth": 7.68,
+          "sensorHeight": 6.144,
+          "focalLength": 9.1,
+          "megapixels": ""
+        }
+      ]
+    },
+    {
+      "name": "DJI Mavic 3M",
+      "sensors": [
+        {
+          "name": "RGB Camera (4/3 CMOS)",
+          "imageWidth": 5280,
+          "imageHeight": 3956,
+          "sensorWidth": 17.4,
+          "sensorHeight": 13,
+          "focalLength": 12.29,
+          "megapixels": 20
+        },
+        {
+          "name": "Multispectral Camera (1/2.8-inch CMOS)",
+          "imageWidth": 2592,
+          "imageHeight": 1944,
+          "sensorWidth": 5.2,
+          "sensorHeight": 3.9,
+          "focalLength": 4.34,
+          "megapixels": 5
         }
       ]
     }
