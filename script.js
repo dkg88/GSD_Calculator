@@ -28,18 +28,32 @@ document.addEventListener('DOMContentLoaded', function () {
   if (flightHeightInput && desiredGSDInput) {
     flightHeightInput.addEventListener('input', handleInput);
     flightHeightInput.addEventListener('blur', handleBlur);
+    flightHeightInput.addEventListener('change', handleInput);
     desiredGSDInput.addEventListener('input', handleInput);
     desiredGSDInput.addEventListener('blur', handleBlur);
+    desiredGSDInput.addEventListener('change', handleInput);
   }
 
   if (flightHeightUpButton && flightHeightDownButton) {
-    flightHeightUpButton.addEventListener('click', () => adjustValue('flight-height', 1));
-    flightHeightDownButton.addEventListener('click', () => adjustValue('flight-height', -1));
+    flightHeightUpButton.addEventListener('click', () => {
+      adjustValue('flight-height', 1);
+      handleFlightHeightInput();
+    });
+    flightHeightDownButton.addEventListener('click', () => {
+      adjustValue('flight-height', -1);
+      handleFlightHeightInput();
+    });
   }
 
   if (desiredGSDUpButton && desiredGSDDownButton) {
-    desiredGSDUpButton.addEventListener('click', () => adjustValue('desired-gsd', 0.1));
-    desiredGSDDownButton.addEventListener('click', () => adjustValue('desired-gsd', -0.1));
+    desiredGSDUpButton.addEventListener('click', () => {
+      adjustValue('desired-gsd', 0.1);
+      handleGSDInput();
+    });
+    desiredGSDDownButton.addEventListener('click', () => {
+      adjustValue('desired-gsd', -0.1);
+      handleGSDInput();
+    });
   }
 
   if (imperialButton && metricButton) {
@@ -54,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
   updatePlaceholders();
   if (imperialButton) imperialButton.classList.add('active');
 });
+
+let selectedSensor = null;
 
 function populateDroneSelect() {
   const droneSelectButton = document.getElementById('drone-select-button');
@@ -129,6 +145,7 @@ function selectSensor(sensor) {
 }
 
 function updateSensorDetails(sensor) {
+  selectedSensor = sensor;
   document.getElementById('image-width').value = `${sensor.imageWidth} px`;
   document.getElementById('image-height').value = `${sensor.imageHeight} px`;
   document.getElementById('sensor-width').value = `${sensor.sensorWidth} mm`;
@@ -138,6 +155,7 @@ function updateSensorDetails(sensor) {
 }
 
 function clearSensorDetails() {
+  selectedSensor = null;
   document.getElementById('image-width').value = '';
   document.getElementById('image-height').value = '';
   document.getElementById('sensor-width').value = '';
@@ -152,7 +170,6 @@ function adjustValue(elementId, increment) {
     let value = parseFloat(inputElement.value) || 0;
     value = Math.max(0, value + increment); // Ensure value doesn't go below 0
     inputElement.value = value.toFixed(2);
-    handleInput(); // Trigger recalculation
   }
 }
 
@@ -189,8 +206,57 @@ function toggleUnits(unit) {
   }
 }
 
+function handleFlightHeightInput() {
+  const flightHeight = parseFloat(document.getElementById('flight-height').value);
+  if (!isNaN(flightHeight) && selectedSensor) {
+    const gsd = calculateGSD(flightHeight, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
+    updateInputValue(document.getElementById('desired-gsd'), gsd, isMetric ? 'cm/px' : 'in/px');
+  }
+}
+
+function handleGSDInput() {
+  const gsd = parseFloat(document.getElementById('desired-gsd').value);
+  if (!isNaN(gsd) && selectedSensor) {
+    const flightHeight = calculateFlightHeight(gsd, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
+    updateInputValue(document.getElementById('flight-height'), flightHeight, isMetric ? 'm' : 'ft');
+  }
+}
+
+function calculateGSD(flightHeight, focalLength, sensorWidth, imageWidth) {
+  // Convert flight height to millimeters if needed
+  const flightHeightMm = isMetric ? flightHeight * 1000 : flightHeight * 304.8;
+
+  // Calculate GSD in millimeters per pixel
+  const gsdMmPerPx = (flightHeightMm * sensorWidth) / (focalLength * imageWidth);
+
+  // Convert GSD to the desired unit
+  return isMetric ? gsdMmPerPx / 10 : gsdMmPerPx / 25.4; // Convert to cm/px if metric, in/px otherwise
+}
+
+function calculateFlightHeight(gsd, focalLength, sensorWidth, imageWidth) {
+  // Convert GSD to millimeters per pixel if needed
+  const gsdMmPerPx = isMetric ? gsd * 10 : gsd * 25.4;
+
+  // Calculate flight height in millimeters
+  const flightHeightMm = (gsdMmPerPx * focalLength * imageWidth) / sensorWidth;
+
+  // Convert flight height to the desired unit
+  return isMetric ? flightHeightMm / 1000 : flightHeightMm / 304.8; // Convert from mm to meters if metric, from mm to feet otherwise
+}
+
 function handleInput() {
-  // Perform GSD calculation here if needed
+  const flightHeightInput = document.getElementById('flight-height');
+  const desiredGSDInput = document.getElementById('desired-gsd');
+  const flightHeight = parseFloat(flightHeightInput.value);
+  const gsd = parseFloat(desiredGSDInput.value);
+
+  if (flightHeightInput === document.activeElement && !isNaN(flightHeight) && selectedSensor) {
+    const calculatedGSD = calculateGSD(flightHeight, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
+    updateInputValue(desiredGSDInput, calculatedGSD, isMetric ? 'cm/px' : 'in/px');
+  } else if (desiredGSDInput === document.activeElement && !isNaN(gsd) && selectedSensor) {
+    const calculatedFlightHeight = calculateFlightHeight(gsd, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
+    updateInputValue(flightHeightInput, calculatedFlightHeight, isMetric ? 'm' : 'ft');
+  }
 }
 
 function handleBlur(event) {
