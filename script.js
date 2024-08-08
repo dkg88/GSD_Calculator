@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
     .then(data => {
       dronesData = data.drones;
       populateDroneSelect();
+      loadPreferences(); // Load preferences after data is fetched and UI is populated
     })
     .catch(error => console.error('Error loading drone data:', error));
 
@@ -57,8 +58,14 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (imperialButton && metricButton) {
-    imperialButton.addEventListener('click', () => toggleUnits('imperial'));
-    metricButton.addEventListener('click', () => toggleUnits('metric'));
+    imperialButton.addEventListener('click', () => {
+      toggleUnits('imperial');
+      trackUsage('unit_toggled', { unit: 'imperial' });
+    });
+    metricButton.addEventListener('click', () => {
+      toggleUnits('metric');
+      trackUsage('unit_toggled', { unit: 'metric' });
+    });
   }
 
   if (resetButton) {
@@ -87,6 +94,7 @@ function populateDroneSelect() {
       droneOption.addEventListener('click', () => {
         selectDrone(drone);
         droneSelectMenu.classList.remove('dropdown-menu-open'); // Close the menu
+        trackUsage('drone_selected', { drone: drone.name }); // Track drone selection
       });
       droneSelectMenu.appendChild(droneOption);
     });
@@ -105,6 +113,7 @@ function selectDrone(drone) {
   } else {
     clearSensorDetails(); // Clear sensor details if multiple sensors are available
   }
+  savePreferences(); // Save preferences when drone is selected
 }
 
 function populateSensorSelect(drone) {
@@ -127,6 +136,7 @@ function populateSensorSelect(drone) {
         sensorOption.addEventListener('click', () => {
           selectSensor(sensor);
           sensorSelectMenu.classList.remove('dropdown-menu-open'); // Close the menu
+          trackUsage('sensor_selected', { sensor: sensor.name }); // Track sensor selection
         });
         sensorSelectMenu.appendChild(sensorOption);
       });
@@ -145,6 +155,7 @@ function selectSensor(sensor) {
   }
   updateSensorDetails(sensor);
   recalculateValues();
+  savePreferences(); // Save preferences when sensor is selected
 }
 
 function updateSensorDetails(sensor) {
@@ -164,7 +175,7 @@ function clearSensorDetails() {
   document.getElementById('sensor-width').value = '';
   document.getElementById('sensor-height').value = '';
   document.getElementById('focal-length').value = '';
-  document.getElementById('megapixels').value = ''; // Clear megapixels
+  document.getElementById('megapixels').value = ''; // Clear Effective Pixels
 }
 
 function adjustValue(elementId, increment) {
@@ -173,6 +184,7 @@ function adjustValue(elementId, increment) {
     let value = parseFloat(inputElement.value) || 0;
     value = Math.max(0, value + increment); // Ensure value doesn't go below 0
     inputElement.value = value.toFixed(2);
+    savePreferences(); // Save preferences when values are adjusted
   }
 }
 
@@ -207,6 +219,8 @@ function toggleUnits(unit) {
     imperialButton.classList.toggle('active', !isMetric);
     metricButton.classList.toggle('active', isMetric);
   }
+
+  savePreferences(); // Save preferences when units are toggled
 }
 
 function handleFlightHeightInput() {
@@ -214,6 +228,8 @@ function handleFlightHeightInput() {
   if (!isNaN(flightHeight) && selectedSensor) {
     const gsd = calculateGSD(flightHeight, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
     updateInputValue(document.getElementById('desired-gsd'), gsd, isMetric ? 'cm/px' : 'in/px');
+    savePreferences(); // Save preferences when flight height is input
+    trackUsage('flight_height_input', { flight_height: flightHeight }); // Track flight height input
   }
 }
 
@@ -222,6 +238,8 @@ function handleGSDInput() {
   if (!isNaN(gsd) && selectedSensor) {
     const flightHeight = calculateFlightHeight(gsd, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
     updateInputValue(document.getElementById('flight-height'), flightHeight, isMetric ? 'm' : 'ft');
+    savePreferences(); // Save preferences when GSD is input
+    trackUsage('gsd_input', { gsd }); // Track GSD input
   }
 }
 
@@ -260,6 +278,8 @@ function handleInput() {
     const calculatedFlightHeight = calculateFlightHeight(gsd, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
     updateInputValue(flightHeightInput, calculatedFlightHeight, isMetric ? 'm' : 'ft');
   }
+
+  savePreferences(); // Save preferences when inputs are handled
 }
 
 function handleBlur(event) {
@@ -299,6 +319,7 @@ function resetCalculator() {
   if (resultElement) {
     resultElement.textContent = '';
   }
+  savePreferences(); // Save preferences when calculator is reset
 }
 
 function recalculateValues() {
@@ -313,5 +334,45 @@ function recalculateValues() {
   } else if (!isNaN(gsd) && selectedSensor) {
     const calculatedFlightHeight = calculateFlightHeight(gsd, selectedSensor.focalLength, selectedSensor.sensorWidth, selectedSensor.imageWidth);
     updateInputValue(flightHeightInput, calculatedFlightHeight, isMetric ? 'm' : 'ft');
+  }
+  savePreferences(); // Save preferences when values are recalculated
+}
+
+function trackUsage(event, properties) {
+  posthog.capture(event, properties);
+}
+
+// Save preferences to local storage
+function savePreferences() {
+  const preferences = {
+    selectedDrone: document.getElementById('drone-select-button').textContent,
+    selectedSensor: document.getElementById('sensor-select-button').textContent,
+    isMetric,
+    flightHeight: document.getElementById('flight-height').value,
+    gsd: document.getElementById('desired-gsd').value
+  };
+  localStorage.setItem('dronePreferences', JSON.stringify(preferences));
+}
+
+// Load preferences from local storage
+function loadPreferences() {
+  const preferences = JSON.parse(localStorage.getItem('dronePreferences'));
+  if (preferences) {
+    const drone = dronesData.find(drone => drone.name === preferences.selectedDrone);
+    if (drone) {
+      selectDrone(drone);
+      const sensor = drone.sensors.find(sensor => sensor.name === preferences.selectedSensor);
+      if (sensor) {
+        selectSensor(sensor);
+      }
+    }
+    if (preferences.isMetric) {
+      toggleUnits('metric');
+    } else {
+      toggleUnits('imperial');
+    }
+    document.getElementById('flight-height').value = preferences.flightHeight;
+    document.getElementById('desired-gsd').value = preferences.gsd;
+    recalculateValues();
   }
 }

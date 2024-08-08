@@ -180,7 +180,7 @@
       "name": "DJI P4 RTK",
       "sensors": [
         {
-          "name": "1-inch CMOS (4:3)",
+          "name": "1-inch CMOS (4:3 aspect ratio)",
           "imageWidth": 4864,
           "imageHeight": 3648,
           "sensorWidth": 13.2,
@@ -189,7 +189,7 @@
           "megapixels": 20
         },
         {
-          "name": "1-inch CMOS (3:2)",
+          "name": "1-inch CMOS (3:2 aspect ratio)",
           "imageWidth": 5472,
           "imageHeight": 3648,
           "sensorWidth": 13.2,
