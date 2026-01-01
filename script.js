@@ -69,7 +69,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (resetButton) {
-    resetButton.addEventListener('click', resetCalculator);
+    resetButton.addEventListener('click', () => {
+      resetCalculator();
+      trackUsage('calculator_reset');
+    });
   }
 
   updatePlaceholders();
@@ -89,8 +92,13 @@ function populateDroneSelect() {
 
     dronesData.forEach(drone => {
       const droneOption = document.createElement('div');
-      droneOption.className = 'py-2 px-3 cursor-pointer hover:bg-gray-100';
-      droneOption.textContent = drone.name;
+      droneOption.className = 'dropdown-option';
+      droneOption.innerHTML = `
+        <svg class="hidden w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>${drone.name}</span>
+      `;
       droneOption.addEventListener('click', () => {
         selectDrone(drone);
         droneSelectMenu.classList.remove('dropdown-menu-open'); // Close the menu
@@ -114,6 +122,17 @@ function selectDrone(drone) {
     clearSensorDetails(); // Clear sensor details if multiple sensors are available
   }
   savePreferences(); // Save preferences when drone is selected
+
+  // Highlight selected option
+  document.querySelectorAll('#drone-select-menu .dropdown-option').forEach(option => {
+    if (option.textContent.trim() === drone.name) {
+      option.classList.add('selected');
+      option.querySelector('svg').classList.remove('hidden');
+    } else {
+      option.classList.remove('selected');
+      option.querySelector('svg').classList.add('hidden');
+    }
+  });
 }
 
 function populateSensorSelect(drone) {
@@ -131,8 +150,13 @@ function populateSensorSelect(drone) {
     } else {
       drone.sensors.forEach(sensor => {
         const sensorOption = document.createElement('div');
-        sensorOption.className = 'py-2 px-3 cursor-pointer hover:bg-gray-100';
-        sensorOption.textContent = sensor.name;
+        sensorOption.className = 'dropdown-option';
+        sensorOption.innerHTML = `
+          <svg class="hidden w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+          <span>${sensor.name}</span>
+        `;
         sensorOption.addEventListener('click', () => {
           selectSensor(sensor);
           sensorSelectMenu.classList.remove('dropdown-menu-open'); // Close the menu
@@ -156,6 +180,17 @@ function selectSensor(sensor) {
   updateSensorDetails(sensor);
   recalculateValues();
   savePreferences(); // Save preferences when sensor is selected
+
+  // Highlight selected option
+  document.querySelectorAll('#sensor-select-menu .dropdown-option').forEach(option => {
+    if (option.textContent.trim() === sensor.name) {
+      option.classList.add('selected');
+      option.querySelector('svg').classList.remove('hidden');
+    } else {
+      option.classList.remove('selected');
+      option.querySelector('svg').classList.add('hidden');
+    }
+  });
 }
 
 function updateSensorDetails(sensor) {
@@ -320,6 +355,7 @@ function resetCalculator() {
     resultElement.textContent = '';
   }
   savePreferences(); // Save preferences when calculator is reset
+  trackUsage('calculator_reset'); // Track calculator reset
 }
 
 function recalculateValues() {
